@@ -1,0 +1,262 @@
+package model.logic;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+
+import model.Comparendo;
+import model.data_structures.Lista;
+import model.data_structures.Queue;
+import model.data_structures.Stack;
+
+/**
+ * Definicion del modelo del mundo
+ *
+ */
+public class Modelo {
+
+	public static String PATH = "./data/comparendos_dei_2018_small.geojson";
+	//	public static String PATH = "./data/comparendos_dei_2018.geojson";
+
+	private Queue<Comparendo> queue;
+	private Stack<Comparendo> stack;
+
+	public Stack<Comparendo> cargarDatos() {
+
+		//TODO Cambiar la clase del contenedor de datos por la Estructura de Datos propia adecuada para resolver el requerimiento 
+		Stack<Comparendo> datos = new Stack();
+
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new FileReader(PATH));
+			JsonElement elem = JsonParser.parseReader(reader);
+			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
+
+
+			SimpleDateFormat parser=new SimpleDateFormat("yyyy/MM/dd");
+
+			for(JsonElement e: e2) {
+				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
+
+				String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();	
+				Date FECHA_HORA = parser.parse(s); 
+
+				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETE").getAsString();
+				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHI").getAsString();
+				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVI").getAsString();
+				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION").getAsString();
+				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRAC").getAsString();	
+				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD").getAsString();
+
+				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(0).getAsDouble();
+
+				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(1).getAsDouble();
+
+				Comparendo c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION, LOCALIDAD, longitud, latitud);
+
+				datos.push(c);
+
+			}
+
+		} catch (FileNotFoundException | ParseException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		stack=datos;
+		return datos;	
+
+	}
+
+	public Queue<Comparendo> cargarDatosQ() {
+
+		//TODO Cambiar la clase del contenedor de datos por la Estructura de Datos propia adecuada para resolver el requerimiento 
+		Queue<Comparendo> datos = new Queue();
+
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new FileReader(PATH));
+			JsonElement elem = JsonParser.parseReader(reader);
+			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
+
+
+			SimpleDateFormat parser=new SimpleDateFormat("yyyy/MM/dd");
+
+			for(JsonElement e: e2) {
+				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
+
+				String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();	
+				Date FECHA_HORA = parser.parse(s); 
+
+				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETE").getAsString();
+				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHI").getAsString();
+				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVI").getAsString();
+				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION").getAsString();
+				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRAC").getAsString();	
+				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD").getAsString();
+
+				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(0).getAsDouble();
+
+				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(1).getAsDouble();
+
+				Comparendo c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION, LOCALIDAD, longitud, latitud);
+
+				datos.enqueue(c);
+
+			}
+
+		} catch (FileNotFoundException | ParseException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		queue=datos;
+		return datos;	
+
+	}
+
+	public Queue<Comparendo> darNcomparendos(int i, String cod)throws Exception
+	{
+		if(stack==null )
+		{
+			throw new Exception();
+
+		}
+		Queue<Comparendo> resp=new Queue<Comparendo>();
+		int n=0;
+
+		while(n<i && !stack.estaVacia())
+		{
+
+			Comparendo c=stack.pop();
+			if(c.compareTo(new Comparendo(i, null, cod, cod, cod, cod, cod, cod, i, i))==0)
+			{
+				n++;
+				resp.enqueue(c);
+			}
+
+		}
+		return resp;
+	}
+
+	public Queue<Comparendo> clusterMasGrande()throws Exception
+	{
+		if(queue==null)
+			throw new Exception();
+		int mayor=0;
+		Queue<Comparendo> mayorQ=new Queue<Comparendo>();
+
+		Queue<Comparendo> actual=new Queue<Comparendo>();
+		String anterior="";
+		while(!queue.estaVacia())
+		{
+			Comparendo act=queue.dequeue();
+			if(0==act.compareTo(new Comparendo(mayor, null, anterior, anterior, anterior, anterior, anterior, anterior, mayor, mayor)))
+			{
+				actual.enqueue(act);
+			}
+			else
+			{
+				actual=new Queue<Comparendo>();
+				actual.enqueue(act);
+			}
+			if(actual.darTamano()>mayor)
+			{
+				mayorQ=actual;
+				mayor=actual.darTamano();
+			}
+			anterior=act.darInfraccion();
+		}
+		return mayorQ;
+	}
+	public static void shellSort(Comparable datos[])
+	{
+
+		int N = datos.length;
+		int h = 1;
+		while (h < N/3) h = 3*h + 1; 
+		while (h >= 1)
+		{ 
+			for (int i = h; i < N; i++)
+			{
+				for (int j = i; j >= h && less(datos[j], datos[j-h]); j -= h)
+					exch(datos, j, j-h);
+			}
+
+			h = h/3; 
+		}
+	}
+	private static void exch(Comparable[] a, int j, int i) {
+		Comparable swap = a[i];
+		 a[i] = a[j];
+		 a[j] = swap; 
+
+	}
+
+	private static boolean less(Comparable v, Comparable w) {
+		return v.compareTo(w) < 0; 
+	}
+
+	public void mergeSort(Comparable datos[])
+	{
+		Comparable[] aux=null;
+		int lo=0;
+		int mid= datos.length/2;
+		int hi= datos.length+1;
+		for (int k = lo; k <= hi; k++)
+			aux[k] = datos[k];
+		int i = lo, j = mid+1;
+		for (int k = lo; k <= hi; k++)
+		{
+			if (i > mid) datos[k] = aux[j++];
+			else if (j > hi) datos[k] = aux[i++];
+			else if (less(aux[j], aux[i])) datos[k] = aux[j++];
+			else datos[k] = aux[i++];
+		} 
+	}
+	public int partition(Comparable[] datos, int lo, int hi)
+	{
+		int i = lo, j = hi+1;
+		while (true)
+		{
+			while (less(datos[++i], datos[lo]))
+				if (i == hi) break;
+			while (less(datos[lo], datos[--j]))
+				if (j == lo) break;
+
+			if (i >= j) break;
+			exch(datos, i, j);
+		}
+		exch(datos, lo, j);
+		return j; 
+	}
+
+	public void quickSort(Comparable datos[],int lo, int hi)
+	{
+		
+		StdRandom.shuffle(datos);// baraja
+		quickSort(datos, 0, datos.length - 1);
+		if (hi <= lo) return;
+		int j = partition(datos, lo, hi);
+		quickSort(datos, lo, j-1);
+		quickSort(datos, j+1, hi); 
+	}
+
+	public Comparable[] copiarComparendos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+}

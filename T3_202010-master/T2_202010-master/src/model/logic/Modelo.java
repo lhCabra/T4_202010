@@ -24,7 +24,7 @@ import model.data_structures.Stack;
  */
 public class Modelo {
 
-	public static String PATH = "./data/comparendos_dei_2018_small.geojson";
+	public static String PATH = "./T3_202010-master/T2_202010-master/data/comparendos_dei_2018.geojson";
 	//	public static String PATH = "./data/comparendos_dei_2018.geojson";
 
 	private Queue<Comparendo> queue;
@@ -205,35 +205,47 @@ public class Modelo {
 	}
 
 	private static boolean less(Comparable v, Comparable w) {
+		if(v==null || w==null)
+			return false;
 		return v.compareTo(w) < 0; 
 	}
 
-	public static void mergeSort(Comparable datos[])
+	public static void mergeSort(Comparable[] datos)
 	{
-		Comparable[] aux=null;
-		int lo=0;
-		int mid= datos.length/2;
-		int hi= datos.length+1;
-		for (int k = lo; k <= hi; k++)
-			aux[k] = datos[k];
-		int i = lo, j = mid+1;
-		for (int k = lo; k <= hi; k++)
+		Comparable[] aux=new Comparable[datos.length];
+		sort(datos,aux,0,datos.length-1);
+		
+	}
+	public static void merge(Comparable[] datos, Comparable[] aux, int lo,int mid, int hi)
+	{
+		for(int k=lo;k<=hi;k++)
+			aux[k]=datos[k];
+		int i=lo,j=mid+1;
+		for(int k=lo;k<=hi;k++)
 		{
 			if (i > mid) datos[k] = aux[j++];
 			else if (j > hi) datos[k] = aux[i++];
 			else if (less(aux[j], aux[i])) datos[k] = aux[j++];
 			else datos[k] = aux[i++];
-		} 
+		}
 	}
-	public static int partition(Comparable[] datos)
+	public static void sort(Comparable[] datos, Comparable[] aux, int lo, int hi)
 	{
-		int lo=0;
-		int hi= datos.length+1;
+		if(hi<=lo)return;
+		int mid = lo+(hi-lo)/2;
+		sort(datos,aux,lo,mid);
+		sort(datos,aux,mid+1,hi);
+		merge(datos,aux,lo,mid,hi);
+	}
+	public static int partition(Comparable[] datos, int lo,int hi)
+	{
 		int i = lo, j = hi+1;
 		while (true)
 		{
-			while (less(datos[++i], datos[lo]))
+			
+			while ( less(datos[++i], datos[lo]))
 				if (i == hi) break;
+				
 			while (less(datos[lo], datos[--j]))
 				if (j == lo) break;
 
@@ -246,18 +258,27 @@ public class Modelo {
 
 	public static void quickSort(Comparable datos[],int lo, int hi)
 	{
-		
-		StdRandom.shuffle(datos);// baraja
-		quickSort(datos, 0, datos.length - 1);
 		if (hi <= lo) return;
-		int j = partition(datos);
+		int j = partition(datos,lo,hi);
 		quickSort(datos, lo, j-1);
 		quickSort(datos, j+1, hi); 
 	}
 
 	public Comparable[] copiarComparendos() {
 		// TODO Auto-generated method stub
-		return null;
+		if(queue==null)
+			return null;
+		Comparable<Comparendo>[] resp= new Comparable[queue.darTamano()];
+		Queue<Comparendo> q=new Queue<Comparendo>();
+		int i=0;
+		while(!queue.estaVacia())
+		{
+			Comparendo c=queue.dequeue();
+			resp[i++]=c;
+			q.enqueue(c);
+		}
+		queue=q;
+		return resp;
 	}
 	
 

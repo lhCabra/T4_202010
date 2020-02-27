@@ -55,7 +55,14 @@ public class Comparendo implements Comparable<Comparendo>{
 	@Override
 	public int compareTo(Comparendo o) {
 		
-		return infraccion.compareTo(o.darInfraccion());
+		if(fecha_hora.compareTo(o.fecha_hora)!=0)
+		{
+			return fecha_hora.compareTo(o.fecha_hora); 
+		}
+		else
+		{
+			return objectId-o.objectId;
+		}
 	}
 	
 }

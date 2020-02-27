@@ -35,7 +35,7 @@ public class Controller {
 		boolean fin = false;
 		String dato = "";
 		String respuesta = "";
-
+		Comparable<Comparendo>[] a=null;
 		while( !fin ){
 			view.printMenu();
 
@@ -45,70 +45,83 @@ public class Controller {
 				modelo = new Modelo();
 
 				long start = System.currentTimeMillis();
-				Stack<Comparendo> stack = modelo.cargarDatos();
+				
 				Queue<Comparendo> queue = modelo.cargarDatosQ();
 
 				long end = System.currentTimeMillis();
 
 				view.printMessage("Tiempo de carga (seg): " + (end-start)/1000.0);
-				view.printMessage("Datos cargados Stack: " + stack.darTamano()+"\n");
 				view.printMessage("Datos cargados Queue: " + queue.darTamano() + "\n");
-				view.printMessage("Primer dato stack: " + stack.darTope().toString() + "\n");
 				view.printMessage("Primer dato queue: " + queue.darPrincipio().toString() + "\n");
 				break;
 
 			case 2:
-				Queue<Comparendo> a;
-				try {
-					a = modelo.clusterMasGrande();
-					while(!a.estaVacia())
+				if(modelo!=null)
+				{
+					long s1=System.currentTimeMillis();
+					Comparable [] copia= modelo.copiarComparendos();
+					long f1=System.currentTimeMillis();
+					view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
+					view.printMessage("Tamaño copia :"+copia.length);
+					s1=System.currentTimeMillis();
+					modelo.shellSort(copia);
+					f1=System.currentTimeMillis();
+					view.printMessage("Tiempo ShellSort :"+(f1-s1)/1000.0);
+					for(int i=0;i<10 && copia[i]!=null;i++)
 					{
-						view.printMessage(a.dequeue().respuesta());
+						view.printMessage(copia[i].toString());
 					}
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					view.printMessage("No se han cargado los datos");
+					for(int i=copia.length-1;i>copia.length-10;i--)
+					{
+						view.printMessage(copia[i].toString());
+					}
 				}
-
 				break;
 			case 3:
 				if(modelo!=null)
 				{
-					view.printMessage("Número de comparendos, Infracción:");
-					option = lector.nextInt();
-					view.printMessage("Infracción:");
-					String option2 = lector.next();
-					Queue<Comparendo> c;
-					try {
-						c = modelo.darNcomparendos(option,option2 );
-						while(!c.estaVacia())
-						{
-							view.printMessage(c.dequeue().respuesta());
-						}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-
-						view.printMessage("No se han cargado los datos");
-
+					long s1=System.currentTimeMillis();
+					Comparable [] copia= modelo.copiarComparendos();
+					long f1=System.currentTimeMillis();
+					view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
+					view.printMessage("Tamaño copia :"+copia.length);
+					s1=System.currentTimeMillis();
+					modelo.mergeSort(copia);
+					f1=System.currentTimeMillis();
+					view.printMessage("Tiempo Merge Sort :"+(f1-s1)/1000.0);
+					for(int i=0;i<10 && copia[i]!=null;i++)
+					{
+						view.printMessage(copia[i].toString());
 					}
-
-
+					for(int i=copia.length-1;i>copia.length-10;i--)
+					{
+						view.printMessage(copia[i].toString());
+					}
 				}
 
 				break;
 			case 4:
-
-				Comparable [] copia=modelo.copiarComparendos();
-				Modelo.shellSort(copia);
-
-			case 5:
-
-				Comparable [] copia1=modelo.copiarComparendos();
-				Modelo.mergeSort(copia1);
-			case 6:
-
-				Comparable [] copia2=modelo.copiarComparendos();
-				Modelo.quickSort(copia2, 0,copia2.length);
+				if(modelo!=null)
+				{
+					long s1=System.currentTimeMillis();
+					Comparable [] copia= modelo.copiarComparendos();
+					long f1=System.currentTimeMillis();
+					view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
+					view.printMessage("Tamaño copia :"+copia.length);
+					s1=System.currentTimeMillis();
+					Modelo.quickSort(copia, 0,copia.length-1);
+					f1=System.currentTimeMillis();
+					view.printMessage("Tiempo Quick Sort :"+(f1-s1)/1000.0);
+					for(int i=0;i<10 && copia[i]!=null;i++)
+					{
+						view.printMessage(copia[i].toString());
+					}
+					for(int i=copia.length-1;i>copia.length-10;i--)
+					{
+						view.printMessage(copia[i].toString());
+					}
+				}
+			
 			case 7:
 
 				fin=true;

@@ -45,7 +45,7 @@ public class Controller {
 				modelo = new Modelo();
 
 				long start = System.currentTimeMillis();
-				
+
 				Queue<Comparendo> queue = modelo.cargarDatosQ();
 
 				long end = System.currentTimeMillis();
@@ -57,6 +57,7 @@ public class Controller {
 
 			case 2:
 				if(modelo!=null)
+				{try
 				{
 					long s1=System.currentTimeMillis();
 					Comparable [] copia= modelo.copiarComparendos();
@@ -66,7 +67,7 @@ public class Controller {
 					s1=System.currentTimeMillis();
 					modelo.shellSort(copia);
 					f1=System.currentTimeMillis();
-					view.printMessage("Tiempo ShellSort :"+(f1-s1)/1000.0);
+					view.printMessage("Tiempo Shell Sort (seg):"+(f1-s1)/1000.0);
 					for(int i=0;i<10 && copia[i]!=null;i++)
 					{
 						view.printMessage(copia[i].toString());
@@ -76,9 +77,15 @@ public class Controller {
 						view.printMessage(copia[i].toString());
 					}
 				}
+				catch(Exception e)
+				{
+					
+				}
+				}
 				break;
 			case 3:
 				if(modelo!=null)
+				{	try
 				{
 					long s1=System.currentTimeMillis();
 					Comparable [] copia= modelo.copiarComparendos();
@@ -88,7 +95,7 @@ public class Controller {
 					s1=System.currentTimeMillis();
 					modelo.mergeSort(copia);
 					f1=System.currentTimeMillis();
-					view.printMessage("Tiempo Merge Sort :"+(f1-s1)/1000.0);
+					view.printMessage("Tiempo Merge Sort (seg):"+(f1-s1)/1000.0);
 					for(int i=0;i<10 && copia[i]!=null;i++)
 					{
 						view.printMessage(copia[i].toString());
@@ -97,32 +104,44 @@ public class Controller {
 					{
 						view.printMessage(copia[i].toString());
 					}
+				}
+				catch(Exception e)
+				{
+
+				}
 				}
 
 				break;
 			case 4:
 				if(modelo!=null)
 				{
-					long s1=System.currentTimeMillis();
-					Comparable [] copia= modelo.copiarComparendos();
-					long f1=System.currentTimeMillis();
-					view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
-					view.printMessage("Tamaño copia :"+copia.length);
-					s1=System.currentTimeMillis();
-					Modelo.quickSort(copia, 0,copia.length-1);
-					f1=System.currentTimeMillis();
-					view.printMessage("Tiempo Quick Sort :"+(f1-s1)/1000.0);
-					for(int i=0;i<10 && copia[i]!=null;i++)
+					try
 					{
-						view.printMessage(copia[i].toString());
+						long s1=System.currentTimeMillis();
+						Comparable [] copia= modelo.copiarComparendos();
+						long f1=System.currentTimeMillis();
+						view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
+						view.printMessage("Tamaño copia :"+copia.length);
+						s1=System.currentTimeMillis();
+						Modelo.quickSort(copia, 0,copia.length-1);
+						f1=System.currentTimeMillis();
+						view.printMessage("Tiempo Quick Sort (seg):"+(f1-s1)/1000.0);
+						for(int i=0;i<10 && copia[i]!=null;i++)
+						{
+							view.printMessage(copia[i].toString());
+						}
+						for(int i=copia.length-1;i>copia.length-10;i--)
+						{
+							view.printMessage(copia[i].toString());
+						}
 					}
-					for(int i=copia.length-1;i>copia.length-10;i--)
+					catch(Exception e)
 					{
-						view.printMessage(copia[i].toString());
+
 					}
 				}
-			
-			case 7:
+				break;
+			case 5:
 
 				fin=true;
 				break;

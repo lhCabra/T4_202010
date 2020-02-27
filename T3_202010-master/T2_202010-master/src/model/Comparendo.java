@@ -15,7 +15,7 @@ public class Comparendo implements Comparable<Comparendo>{
 
 	private double latitud;
 	private double longitud;
-	
+
 	public Comparendo(int objeId, Date fecha, String descripcion, String detencion, String claseVeh, String tipoSer, String codInfraccion, String localidadP, double lonP, double latP)
 	{
 		objectId = objeId;
@@ -29,22 +29,22 @@ public class Comparendo implements Comparable<Comparendo>{
 		longitud = lonP;
 		latitud = latP;
 	}
-	
+
 	public int darObjectID()
 	{
 		return objectId;
 	}
-	
+
 	public String darInfraccion()
 	{
 		return infraccion;
 	}
-	
+
 	public String respuesta()
 	{
 		return infraccion+", "+objectId+", "+fecha_hora+", "+clase_vehi+", "+tipo_servi+", "+localidad+".";
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Comparendo [OBJECTID=" + objectId + ", FECHA_HORA=" + fecha_hora + ", DES_INFRAC=" + des_infrac
@@ -54,7 +54,7 @@ public class Comparendo implements Comparable<Comparendo>{
 	}
 	@Override
 	public int compareTo(Comparendo o) {
-		
+
 		if(fecha_hora.compareTo(o.fecha_hora)!=0)
 		{
 			return fecha_hora.compareTo(o.fecha_hora); 
@@ -64,5 +64,5 @@ public class Comparendo implements Comparable<Comparendo>{
 			return objectId-o.objectId;
 		}
 	}
-	
+
 }

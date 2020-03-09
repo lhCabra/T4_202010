@@ -24,7 +24,7 @@ import model.data_structures.Stack;
  */
 public class Modelo {
 
-	public static String PATH = "./T3_202010-master/T2_202010-master/data/comparendos_dei_2018.geojson";
+	public static String PATH = "./T3_202010-master/T2_202010-master/data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
 	//	public static String PATH = "./data/comparendos_dei_2018.geojson";
 
 	private Queue<Comparendo> queue;

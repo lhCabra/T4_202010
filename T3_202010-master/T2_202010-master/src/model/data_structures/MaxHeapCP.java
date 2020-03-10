@@ -5,7 +5,7 @@ public class MaxHeapCP<T extends Comparable<T>>
 	private T[] pq;
 	private int N=0;
 
-	MaxHeapCP(int maxN)
+	public MaxHeapCP(int maxN)
 	{
 		pq=(T[])new Comparable[maxN +1];
 	}

@@ -2,22 +2,62 @@ package model.data_structures;
 
 public class MaxColaCP <T extends Comparable<T>>
 {
-MaxColaCP()
-{
+	NodoQ<T> primero=null;
+	//	NodoQ<T> ultimo=null;
+	int tamano=0;
+	public int darNumElementos() {
+		if(primero==null)
+			return 0;
+		int contador=0;
+		for(NodoQ actual=primero;actual.darSiguiente()!=null;actual=actual.darSiguiente())
+		{
+			contador++;
+		}
+		tamano=contador+1;
+		return contador+1;
 	}
-public int darNumElementos()
-{
+
+	public void agregar(T elemento)
+	{
+		NodoQ n= new NodoQ(elemento);
+		if( primero== null)
+		{
+			primero=n;
+			//			ultimo=n;
+		}
+		else
+		{
+			NodoQ actual=primero;
+			boolean encontro=false;
+			while(actual.darSiguiente()==null&&!encontro)
+			{
+				if(elemento.compareTo((T) actual.darElemento())>0)
+				{
+					if(actual.darAnterior()!=null)
+					{
+						actual.darAnterior().cambiarSiguiente(n);
+
+					}
+					actual.cambiarAnterior(n);
+					encontro=true;
+				}
+				actual=actual.darSiguiente();
+			}
+
+		}
 	}
-public void agregar(T elemento)
-{
+	public T sacarMax () 
+	{
+		T resp=primero.darElemento();
+		primero=primero.darSiguiente();
+		return resp;
 	}
-public T sacarMax () 
-{
+	public T darMax() 
+	{
+		return primero.darElemento();
 	}
-public T darMax() 
-{
-	}
-public boolean esVacia ()
-{
+	public boolean esVacia ()
+	{
+		return tamano==0;
 	}
 }

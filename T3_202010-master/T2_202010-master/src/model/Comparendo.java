@@ -55,13 +55,13 @@ public class Comparendo implements Comparable<Comparendo>{
 	@Override
 	public int compareTo(Comparendo o) {
 
-		if(fecha_hora.compareTo(o.fecha_hora)!=0)
+		if(latitud>o.latitud)
 		{
-			return fecha_hora.compareTo(o.fecha_hora); 
+			return 1; 
 		}
 		else
 		{
-			return objectId-o.objectId;
+			return -1;
 		}
 	}
 

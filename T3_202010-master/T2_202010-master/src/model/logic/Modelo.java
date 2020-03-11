@@ -46,7 +46,7 @@ public class Modelo {
 			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
 
 
-			SimpleDateFormat parser=new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat parser=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
 			for(JsonElement e: e2) {
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
@@ -378,5 +378,35 @@ public class Modelo {
 		return resp;
 	}
 	
-
+	public int[] posAleatorias(int pTamano)
+	{	
+		int [] resp=new int[pTamano];
+		Comparendo[] aux= (Comparendo[])copiarComparendos();
+		for(int i=0 ; i<pTamano;i++)
+		{
+			int pos = (int) Math.floor(Math.random()*aux.length);
+			if(aux[pos]!=null)
+			{
+				resp[i]=pos;
+				aux[pos]=null;
+			}
+			else
+			{
+				i--;
+			}
+			
+		}
+		return resp;
+	}
+	public MaxColaCP<Comparendo> crearMaxColaCP(int[] pPos)
+	{
+		MaxColaCP<Comparendo> respuesta= new MaxColaCP<>();
+		Comparendo[] aux= (Comparendo[])copiarComparendos();
+		for(int i=0 ; i<pPos.length;i++)
+		{
+			respuesta.agregar(aux[pPos[i]]);
+		}
+		return respuesta;
+	}
+	
 }

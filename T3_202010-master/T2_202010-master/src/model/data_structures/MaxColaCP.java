@@ -5,6 +5,10 @@ public class MaxColaCP <T extends Comparable<T>>
 	NodoQ<T> primero=null;
 	//	NodoQ<T> ultimo=null;
 	int tamano=0;
+	public MaxColaCP()
+	{
+		
+	}
 	public int darNumElementos() {
 		if(primero==null)
 			return 0;
@@ -19,7 +23,7 @@ public class MaxColaCP <T extends Comparable<T>>
 
 	public void agregar(T elemento)
 	{
-		NodoQ n= new NodoQ(elemento);
+		NodoQ<T> n= new NodoQ<T>(elemento);
 		if( primero== null)
 		{
 			primero=n;
@@ -27,7 +31,7 @@ public class MaxColaCP <T extends Comparable<T>>
 		}
 		else
 		{
-			NodoQ actual=primero;
+			NodoQ<T> actual=primero;
 			boolean encontro=false;
 			while(actual.darSiguiente()==null&&!encontro)
 			{

@@ -39,7 +39,18 @@ public class Comparendo implements Comparable<Comparendo>{
 	{
 		return infraccion;
 	}
-
+public String darClase()
+{
+	return clase_vehi;
+	}
+public Double darLongitud()
+{
+	return longitud;
+	}
+public Double darLatitud()
+{
+	return latitud;
+	}
 	public String respuesta()
 	{
 		return infraccion+", "+objectId+", "+fecha_hora+", "+clase_vehi+", "+tipo_servi+", "+localidad+".";

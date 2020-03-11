@@ -79,7 +79,7 @@ public class Controller {
 				}
 				catch(Exception e)
 				{
-					
+
 				}
 				}
 				break;
@@ -142,6 +142,89 @@ public class Controller {
 				}
 				break;
 			case 5:
+				if(modelo!=null)
+				{
+					try
+					{
+						long s1=System.currentTimeMillis();
+						Comparable [] copia= modelo.copiarComparendos();
+						long f1=System.currentTimeMillis();
+						view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
+						view.printMessage("Tamaño copia :"+copia.length);
+						s1=System.currentTimeMillis();
+						Modelo.quickSort(copia, 0,copia.length-1);
+						f1=System.currentTimeMillis();
+						view.printMessage("Tiempo Quick Sort (seg):"+(f1-s1)/1000.0);
+						for(int i=0;i<10 && copia[i]!=null;i++)
+						{
+							view.printMessage(copia[i].toString());
+						}
+						for(int i=copia.length-1;i>copia.length-10;i--)
+						{
+							view.printMessage(copia[i].toString());
+						}
+					}
+					catch(Exception e)
+					{
+
+					}
+				}
+				break;
+			case 6://cola
+				if(modelo!=null)
+				{
+					try
+					{
+						view.printMessage("tamaño de la muestra:");
+						String option1 = lector.next();
+						view.printMessage("tipos de vehiculos:");
+						String option2 = lector.next();
+						long s1=System.currentTimeMillis();
+						ArregloDinamico<Comparendo> resp=modelo.darNAlNorte(Integer.parseInt(option1), option2);
+						int i=0;
+						while(i<resp.darTamano())
+						{
+							view.printMessage(resp.darElemento(i).darObjectID()+resp.darElemento(i).darClase()+resp.darElemento(i).darLatitud()+resp.darElemento(i).darClase()+resp.darElemento(i).darLatitud());
+							i++;
+						}
+						s1=System.currentTimeMillis();
+						view.printMessage("Tiempo con MaxColaCP (seg):"+(s1)/1000.0);
+
+					}
+					catch(Exception e)
+					{
+
+					}
+				}
+				break;
+			case 7://heap
+				if(modelo!=null)
+				{
+					try
+					{
+						view.printMessage("tamaño de la muestra:");
+						String option1 = lector.next();
+						view.printMessage("tipos de vehiculos:");
+						String option2 = lector.next();
+						long s1=System.currentTimeMillis();
+						ArregloDinamico<Comparendo> resp=modelo.darNNorte(Integer.parseInt(option1), option2);
+						int i=0;
+						while(i<resp.darTamano())
+						{
+							view.printMessage(resp.darElemento(i).darObjectID()+resp.darElemento(i).darClase()+resp.darElemento(i).darLatitud()+resp.darElemento(i).darClase()+resp.darElemento(i).darLatitud());
+							i++;
+						}
+						s1=System.currentTimeMillis();
+						view.printMessage("Tiempo con MaxHeapCP (seg):"+(s1)/1000.0);
+
+					}
+					catch(Exception e)
+					{
+
+					}
+				}
+				break;
+			case 8:
 
 				fin=true;
 				break;

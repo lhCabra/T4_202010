@@ -14,6 +14,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import model.Comparendo;
+import model.data_structures.ArregloDinamico;
 import model.data_structures.Lista;
 import model.data_structures.MaxColaCP;
 import model.data_structures.MaxHeapCP;
@@ -27,7 +28,7 @@ import model.data_structures.Stack;
 public class Modelo {
 
 	//public static String PATH = "./T3_202010-master/T2_202010-master/data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
-		public static String PATH = "./data/comparendos_dei_2018.geojson";
+	public static String PATH = "./data/comparendos_dei_2018.geojson";
 
 	private Queue<Comparendo> queue;
 	private Stack<Comparendo> stack;
@@ -296,8 +297,8 @@ public class Modelo {
 	}
 	private static void exch(Comparable[] a, int j, int i) {
 		Comparable swap = a[i];
-		 a[i] = a[j];
-		 a[j] = swap; 
+		a[i] = a[j];
+		a[j] = swap; 
 
 	}
 
@@ -311,7 +312,7 @@ public class Modelo {
 	{
 		Comparable[] aux=new Comparable[datos.length];
 		sort(datos,aux,0,datos.length-1);
-		
+
 	}
 	public static void merge(Comparable[] datos, Comparable[] aux, int lo,int mid, int hi)
 	{
@@ -339,10 +340,10 @@ public class Modelo {
 		int i = lo, j = hi+1;
 		while (true)
 		{
-			
+
 			while ( less(datos[++i], datos[lo]))
 				if (i == hi) break;
-				
+
 			while (less(datos[lo], datos[--j]))
 				if (j == lo) break;
 
@@ -377,7 +378,7 @@ public class Modelo {
 		queue=q;
 		return resp;
 	}
-	
+
 	public int[] posAleatorias(int pTamano)
 	{	
 		int [] resp=new int[pTamano];
@@ -394,7 +395,7 @@ public class Modelo {
 			{
 				i--;
 			}
-			
+
 		}
 		return resp;
 	}
@@ -408,5 +409,67 @@ public class Modelo {
 		}
 		return respuesta;
 	}
-	
+	public MaxHeapCP<Comparendo> crearMaxHeapCP(int[] pPos)
+	{
+		MaxHeapCP<Comparendo> respuesta= new MaxHeapCP<>(pPos.length);
+		Comparendo[] aux= (Comparendo[])copiarComparendos();
+		for(int i=0 ; i<pPos.length;i++)
+		{
+			respuesta.agregar(aux[pPos[i]]);
+		}
+		return respuesta;
+	}
+	public ArregloDinamico<Comparendo> darNAlNorte(int n, String tipos)	
+	{
+		
+		String[] tipo =tipos.split(","); 
+		ArregloDinamico<Comparendo> resp= new ArregloDinamico(100);
+
+		int contador=0;
+
+		while(cola.darNumElementos()!=0&&contador<=n)
+		{
+			int j=0;
+			boolean ya=false;
+			while(j<tipo.length&&!ya)
+			{
+				if(cola.darMax().darClase().equalsIgnoreCase(tipo[j]))
+				{
+					resp.agregar(cola.darMax());
+					ya=true;
+					contador++;
+				}
+				j++;
+			}
+			cola.sacarMax();
+
+		}
+		return resp;
+	}
+	public ArregloDinamico<Comparendo> darNNorte(int n, String tipos)	
+	{
+		String[] tipo =tipos.split(","); 
+		ArregloDinamico<Comparendo> resp= new ArregloDinamico(100);
+
+		int contador=0;
+
+		while(heap.darNumElementos()!=0&&contador<=n)
+		{
+			int j=0;
+			boolean ya=false;
+			while(j<tipo.length&&!ya)
+			{
+				if(heap.darMax().darClase().equalsIgnoreCase(tipo[j]))
+				{
+					resp.agregar(heap.darMax());
+					ya=true;
+					contador++;
+				}
+				j++;
+			}
+			heap.sacarMax();
+
+		}
+		return resp;
+	}
 }

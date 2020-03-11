@@ -17,8 +17,9 @@ public class View
 			System.out.println("1. Cargar Datos (Se debe agregar el archivo geojson a la carpeta data)");
 			System.out.println("2. Shell Sort");
 			System.out.println("3. Merge Sort");
-			System.out.println("4. Quick Sort");
-			System.out.println("5. Exit");
+			System.out.println("6. MaxColaCP");
+			System.out.println("7. MaxHeapCP");
+			System.out.println("8. Exit");
 			System.out.println("Dar el numero de opcion a resolver, luego oprimir tecla Return: (e.g., 1):");
 		}
 

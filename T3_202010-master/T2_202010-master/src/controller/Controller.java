@@ -6,6 +6,7 @@ import java.util.Scanner;
 import model.Comparendo;
 import model.data_structures.ArregloDinamico;
 import model.data_structures.Lista;
+import model.data_structures.MaxColaCP;
 import model.data_structures.Queue;
 import model.data_structures.Stack;
 import model.logic.Modelo;
@@ -53,19 +54,20 @@ public class Controller {
 				view.printMessage("Tiempo de carga (seg): " + (end-start)/1000.0);
 				view.printMessage("Datos cargados Queue: " + queue.darTamano() + "\n");
 				view.printMessage("Primer dato queue: " + queue.darPrincipio().toString() + "\n");
+				modelo.crearMaxColaCP(modelo.posAleatorias(10));
 				break;
 
 			case 2:
 				if(modelo!=null)
 				{try
 				{
+					
 					long s1=System.currentTimeMillis();
 					Comparable [] copia= modelo.copiarComparendos();
 					long f1=System.currentTimeMillis();
 					view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
 					view.printMessage("Tamaño copia :"+copia.length);
 					s1=System.currentTimeMillis();
-					modelo.shellSort(copia);
 					f1=System.currentTimeMillis();
 					view.printMessage("Tiempo Shell Sort (seg):"+(f1-s1)/1000.0);
 					for(int i=0;i<10 && copia[i]!=null;i++)
@@ -93,7 +95,6 @@ public class Controller {
 					view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
 					view.printMessage("Tamaño copia :"+copia.length);
 					s1=System.currentTimeMillis();
-					modelo.mergeSort(copia);
 					f1=System.currentTimeMillis();
 					view.printMessage("Tiempo Merge Sort (seg):"+(f1-s1)/1000.0);
 					for(int i=0;i<10 && copia[i]!=null;i++)
@@ -123,7 +124,7 @@ public class Controller {
 						view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
 						view.printMessage("Tamaño copia :"+copia.length);
 						s1=System.currentTimeMillis();
-						Modelo.quickSort(copia, 0,copia.length-1);
+						
 						f1=System.currentTimeMillis();
 						view.printMessage("Tiempo Quick Sort (seg):"+(f1-s1)/1000.0);
 						for(int i=0;i<10 && copia[i]!=null;i++)
@@ -152,7 +153,6 @@ public class Controller {
 						view.printMessage("Tiempo copia :"+(f1-s1)/1000.0);
 						view.printMessage("Tamaño copia :"+copia.length);
 						s1=System.currentTimeMillis();
-						Modelo.quickSort(copia, 0,copia.length-1);
 						f1=System.currentTimeMillis();
 						view.printMessage("Tiempo Quick Sort (seg):"+(f1-s1)/1000.0);
 						for(int i=0;i<10 && copia[i]!=null;i++)
@@ -180,12 +180,13 @@ public class Controller {
 						view.printMessage("tipos de vehiculos:");
 						String option2 = lector.next();
 						long s1=System.currentTimeMillis();
-						ArregloDinamico<Comparendo> resp=modelo.darNAlNorte(Integer.parseInt(option1), option2);
+						MaxColaCP<Comparendo> resp=modelo.darNAlNorte(Integer.parseInt(option1), option2);
 						int i=0;
-						while(i<resp.darTamano())
+						while(!resp.esVacia())
 						{
-							view.printMessage(resp.darElemento(i).darObjectID()+resp.darElemento(i).darClase()+resp.darElemento(i).darLatitud()+resp.darElemento(i).darClase()+resp.darElemento(i).darLatitud());
-							i++;
+							view.printMessage("Object ID: "+resp.darMax().darObjectID()+" Clase: "+resp.darMax().darClase()+" Latitud: "+resp.darMax().darLatitud());
+							resp.sacarMax();
+							
 						}
 						s1=System.currentTimeMillis();
 						view.printMessage("Tiempo con MaxColaCP (seg):"+(s1)/1000.0);

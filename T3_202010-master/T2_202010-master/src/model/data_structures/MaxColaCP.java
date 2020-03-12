@@ -33,7 +33,7 @@ public class MaxColaCP <T extends Comparable<T>>
 		{
 			NodoQ<T> actual=primero;
 			boolean encontro=false;
-			while(actual.darSiguiente()==null&&!encontro)
+			while(actual.darSiguiente()!=null&&!encontro)
 			{
 				if(elemento.compareTo((T) actual.darElemento())>0)
 				{

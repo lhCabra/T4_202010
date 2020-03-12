@@ -27,7 +27,7 @@ import model.data_structures.Stack;
  */
 public class Modelo {
 
-	//public static String PATH = "./T3_202010-master/T2_202010-master/data/Comparendos_DEI_2018_Bogotá_D.C.geojson";
+	public static String PATH1 = "./T3_202010-master/T2_202010-master/data/Comparendos_DEI_2018_Bogotá_D.C_small.geojson";
 	public static String PATH = "./data/comparendos_dei_2018.geojson";
 
 	private Queue<Comparendo> queue;
@@ -90,12 +90,12 @@ public class Modelo {
 
 		JsonReader reader;
 		try {
-			reader = new JsonReader(new FileReader(PATH));
+			reader = new JsonReader(new FileReader(PATH1));
 			JsonElement elem = JsonParser.parseReader(reader);
 			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
 
 
-			SimpleDateFormat parser=new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat parser=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
 			for(JsonElement e: e2) {
 				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
@@ -103,11 +103,11 @@ public class Modelo {
 				String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();	
 				Date FECHA_HORA = parser.parse(s); 
 
-				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETE").getAsString();
-				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHI").getAsString();
-				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVI").getAsString();
+				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETECCION").getAsString();
+				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHICULO" ).getAsString();
+				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVICIO").getAsString();
 				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION").getAsString();
-				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRAC").getAsString();	
+				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRACCION").getAsString();	
 				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD").getAsString();
 
 				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
@@ -224,144 +224,7 @@ public class Modelo {
 		return datos;	
 
 	}
-	public Queue<Comparendo> darNcomparendos(int i, String cod)throws Exception
-	{
-		if(stack==null )
-		{
-			throw new Exception();
-
-		}
-		Queue<Comparendo> resp=new Queue<Comparendo>();
-		int n=0;
-
-		while(n<i && !stack.estaVacia())
-		{
-
-			Comparendo c=stack.pop();
-			if(c.compareTo(new Comparendo(i, null, cod, cod, cod, cod, cod, cod, i, i))==0)
-			{
-				n++;
-				resp.enqueue(c);
-			}
-
-		}
-		return resp;
-	}
-
-	public Queue<Comparendo> clusterMasGrande()throws Exception
-	{
-		if(queue==null)
-			throw new Exception();
-		int mayor=0;
-		Queue<Comparendo> mayorQ=new Queue<Comparendo>();
-
-		Queue<Comparendo> actual=new Queue<Comparendo>();
-		String anterior="";
-		while(!queue.estaVacia())
-		{
-			Comparendo act=queue.dequeue();
-			if(0==act.compareTo(new Comparendo(mayor, null, anterior, anterior, anterior, anterior, anterior, anterior, mayor, mayor)))
-			{
-				actual.enqueue(act);
-			}
-			else
-			{
-				actual=new Queue<Comparendo>();
-				actual.enqueue(act);
-			}
-			if(actual.darTamano()>mayor)
-			{
-				mayorQ=actual;
-				mayor=actual.darTamano();
-			}
-			anterior=act.darInfraccion();
-		}
-		return mayorQ;
-	}
-	public static void shellSort(Comparable datos[])
-	{
-
-		int N = datos.length;
-		int h = 1;
-		while (h < N/3) h = 3*h + 1; 
-		while (h >= 1)
-		{ 
-			for (int i = h; i < N; i++)
-			{
-				for (int j = i; j >= h && less(datos[j], datos[j-h]); j -= h)
-					exch(datos, j, j-h);
-			}
-
-			h = h/3; 
-		}
-	}
-	private static void exch(Comparable[] a, int j, int i) {
-		Comparable swap = a[i];
-		a[i] = a[j];
-		a[j] = swap; 
-
-	}
-
-	private static boolean less(Comparable v, Comparable w) {
-		if(v==null || w==null)
-			return false;
-		return v.compareTo(w) < 0; 
-	}
-
-	public static void mergeSort(Comparable[] datos)
-	{
-		Comparable[] aux=new Comparable[datos.length];
-		sort(datos,aux,0,datos.length-1);
-
-	}
-	public static void merge(Comparable[] datos, Comparable[] aux, int lo,int mid, int hi)
-	{
-		for(int k=lo;k<=hi;k++)
-			aux[k]=datos[k];
-		int i=lo,j=mid+1;
-		for(int k=lo;k<=hi;k++)
-		{
-			if (i > mid) datos[k] = aux[j++];
-			else if (j > hi) datos[k] = aux[i++];
-			else if (less(aux[j], aux[i])) datos[k] = aux[j++];
-			else datos[k] = aux[i++];
-		}
-	}
-	public static void sort(Comparable[] datos, Comparable[] aux, int lo, int hi)
-	{
-		if(hi<=lo)return;
-		int mid = lo+(hi-lo)/2;
-		sort(datos,aux,lo,mid);
-		sort(datos,aux,mid+1,hi);
-		merge(datos,aux,lo,mid,hi);
-	}
-	public static int partition(Comparable[] datos, int lo,int hi)
-	{
-		int i = lo, j = hi+1;
-		while (true)
-		{
-
-			while ( less(datos[++i], datos[lo]))
-				if (i == hi) break;
-
-			while (less(datos[lo], datos[--j]))
-				if (j == lo) break;
-
-			if (i >= j) break;
-			exch(datos, i, j);
-		}
-		exch(datos, lo, j);
-		return j; 
-	}
-
-	public static void quickSort(Comparable datos[],int lo, int hi)
-	{
-		if (hi <= lo) return;
-		int j = partition(datos,lo,hi);
-		quickSort(datos, lo, j-1);
-		quickSort(datos, j+1, hi); 
-	}
-
+	
 	public Comparable[] copiarComparendos() {
 		// TODO Auto-generated method stub
 		if(queue==null)
@@ -382,7 +245,7 @@ public class Modelo {
 	public int[] posAleatorias(int pTamano)
 	{	
 		int [] resp=new int[pTamano];
-		Comparendo[] aux= (Comparendo[])copiarComparendos();
+		Comparable<Comparendo>[] aux= (Comparable<Comparendo>[])copiarComparendos();
 		for(int i=0 ; i<pTamano;i++)
 		{
 			int pos = (int) Math.floor(Math.random()*aux.length);
@@ -401,13 +264,13 @@ public class Modelo {
 	}
 	public MaxColaCP<Comparendo> crearMaxColaCP(int[] pPos)
 	{
-		MaxColaCP<Comparendo> respuesta= new MaxColaCP<>();
-		Comparendo[] aux= (Comparendo[])copiarComparendos();
+		cola= new MaxColaCP<>();
+		Comparable<Comparendo>[] aux= (Comparable<Comparendo>[])copiarComparendos();
 		for(int i=0 ; i<pPos.length;i++)
 		{
-			respuesta.agregar(aux[pPos[i]]);
+			cola.agregar((Comparendo)aux[pPos[i]]);
 		}
-		return respuesta;
+		return cola;
 	}
 	public MaxHeapCP<Comparendo> crearMaxHeapCP(int[] pPos)
 	{
@@ -419,14 +282,15 @@ public class Modelo {
 		}
 		return respuesta;
 	}
-	public ArregloDinamico<Comparendo> darNAlNorte(int n, String tipos)	
+	
+	public MaxColaCP<Comparendo> darNAlNorte(int n, String tipos)	
 	{
 		
 		String[] tipo =tipos.split(","); 
-		ArregloDinamico<Comparendo> resp= new ArregloDinamico(100);
+		MaxColaCP<Comparendo> resp= new MaxColaCP<Comparendo>();
 
 		int contador=0;
-
+		Queue<Comparendo> aux=new Queue<Comparendo>();
 		while(cola.darNumElementos()!=0&&contador<=n)
 		{
 			int j=0;
@@ -441,9 +305,13 @@ public class Modelo {
 				}
 				j++;
 			}
+			if(!ya)
+				aux.enqueue(cola.darMax());
 			cola.sacarMax();
 
 		}
+		while(!aux.estaVacia())
+			cola.agregar(aux.dequeue());
 		return resp;
 	}
 	public ArregloDinamico<Comparendo> darNNorte(int n, String tipos)	
